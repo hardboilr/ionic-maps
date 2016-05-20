@@ -1,6 +1,12 @@
 {
   "name": "ionic-maps",
   "app_id": "d95bdb93",
+  "proxies": [
+    {
+      "path":  "/api",
+      "proxyUrl": "http://ionicbackend-plaul.rhcloud.com/api"
+    }
+  ],
   "gulpStartupTasks": [
     "sass",
     "watch"
@@ -8,5 +14,12 @@
   "watchPatterns": [
     "www/**/*",
     "!www/lib/**/*"
+  ],
+  "browsers": [
+    {
+      "platform": "android",
+      "browser": "crosswalk",
+      "version": "12.41.296.5"
+    }
   ]
 }

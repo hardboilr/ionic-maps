@@ -2,6 +2,7 @@
 
 var myApp = angular.module('starter', ['ionic', 'ionic.service.core', 'ngCordova']);
 
+// checks that platform is up and running and if plugins are available
 myApp.run(function ($ionicPlatform) {
   $ionicPlatform.ready(function () {
     if (window.cordova && window.cordova.plugins.Keyboard) {
@@ -15,7 +16,7 @@ myApp.run(function ($ionicPlatform) {
 });
 
 
-myApp.controller('MapCtrl', function ($scope, $state, $cordovaGeolocation, $ionicModal, $http) {
+myApp.controller('MapCtrl', function ($scope, $state, $cordovaGeolocation, $ionicModal, $http, ApiEndpoint) {
   var options = { timeout: 10000, enableHighAccuracy: true };
   var latLng = {};
 
@@ -77,14 +78,17 @@ myApp.controller('MapCtrl', function ($scope, $state, $cordovaGeolocation, $ioni
 
   $scope.user = {};
   $scope.registerUser = function (user) {
+    console.log('ApiEndpoint', ApiEndpoint.url);
+    console.log('Full endpoint: ' + ApiEndpoint.url + '/friends/register/' + user.distance);
+
     $scope.modal.hide();
     user.loc = [];
-    user.loc.push(latLng.lng()); // Important, longitude first
-    user.loc.push(latLng.lat());
+    user.loc.push(latLng.lng); // Important, longitude first
+    user.loc.push(latLng.lat);
 
     $http({
       method: 'POST',
-      url: 'http://ionicbackend-plaul.rhcloud.com/api/friends/register/' + user.distance,
+      url: ApiEndpoint.url + '/friends/register/' + user.distance,
       data: user
     }).then(function (data) {
 
@@ -122,5 +126,9 @@ myApp.config(function ($stateProvider, $urlRouterProvider) {
       controller: 'MapCtrl'
     });
   $urlRouterProvider.otherwise('/');
+});
+
+myApp.constant('ApiEndpoint', {
+  url: 'http://ionicbackend-plaul.rhcloud.com/api'
 });
 
